@@ -26,8 +26,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
+import com.android.settingslib.Utils;
 import com.android.systemui.R;
 import com.android.systemui.util.LargeScreenUtils;
+import com.android.systemui.statusbar.policy.NetworkTraffic;
 
 /**
  * View that contains the top-most bits of the QS panel (primarily the status bar with date, time,
@@ -39,6 +41,7 @@ public class QuickStatusBarHeader extends FrameLayout {
     private boolean mQsDisabled;
 
     protected QuickQSPanel mHeaderQsPanel;
+    private NetworkTraffic mNetworkTraffic;
 
     public QuickStatusBarHeader(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -48,6 +51,7 @@ public class QuickStatusBarHeader extends FrameLayout {
     protected void onFinishInflate() {
         super.onFinishInflate();
         mHeaderQsPanel = findViewById(R.id.quick_qs_panel);
+        mNetworkTraffic = findViewById(R.id.networkTraffic);
 
         updateResources();
     }
@@ -89,6 +93,10 @@ public class QuickStatusBarHeader extends FrameLayout {
             qqsLP.topMargin = mContext.getResources()
                     .getDimensionPixelSize(R.dimen.large_screen_shade_header_min_height);
         }
+
+        int textColor = Utils.getColorAttrDefaultColor(mContext, android.R.attr.textColorPrimary);
+        mNetworkTraffic.setTintColor(textColor);
+
         mHeaderQsPanel.setLayoutParams(qqsLP);
     }
 
