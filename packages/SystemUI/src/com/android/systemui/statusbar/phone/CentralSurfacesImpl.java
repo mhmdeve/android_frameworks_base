@@ -501,6 +501,7 @@ public class CentralSurfacesImpl implements CoreStartable, CentralSurfaces {
     private final StatusBarSignalPolicy mStatusBarSignalPolicy;
     private final StatusBarHideIconsForBouncerManager mStatusBarHideIconsForBouncerManager;
     private final Lazy<LightRevealScrimViewModel> mLightRevealScrimViewModelLazy;
+    private final StatusBarIconController mStatusBarIconController;
 
     /** Controller for the Shade. */
     @VisibleForTesting
@@ -777,7 +778,8 @@ public class CentralSurfacesImpl implements CoreStartable, CentralSurfaces {
             BurnInProtectionController burnInProtectionController,
             AlternateBouncerInteractor alternateBouncerInteractor,
             UserTracker userTracker,
-            Provider<FingerprintManager> fingerprintManager
+            Provider<FingerprintManager> fingerprintManager,
+            StatusBarIconController statusBarIconController
     ) {
         mContext = context;
         mNotificationsController = notificationsController;
@@ -863,6 +865,7 @@ public class CentralSurfacesImpl implements CoreStartable, CentralSurfaces {
         mLockscreenShadeTransitionController = lockscreenShadeTransitionController;
         mStartingSurfaceOptional = startingSurfaceOptional;
         mDreamManager = dreamManager;
+        mStatusBarIconController = statusBarIconController;
         lockscreenShadeTransitionController.setCentralSurfaces(this);
         statusBarWindowStateController.addListener(this::onStatusBarWindowStateChanged);
 
@@ -4339,6 +4342,7 @@ public class CentralSurfacesImpl implements CoreStartable, CentralSurfaces {
                     updateScrimController();
                     mPresenter.updateMediaMetaData(false, mState != StatusBarState.KEYGUARD);
                     Trace.endSection();
+                    ((StatusBarIconControllerImpl) mStatusBarIconController).setKeyguardShowing(mState == StatusBarState.KEYGUARD);
                 }
 
                 @Override
